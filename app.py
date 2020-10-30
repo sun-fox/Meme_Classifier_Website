@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, send_from_directory
 from keras.models import load_model
 import cv2
 import keras
-from gevent.pywsgi import WSGIServer
+# from gevent.pywsgi import WSGIServer
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten
 from tensorflow.keras.layers import Conv2D, MaxPooling2D
@@ -86,5 +86,8 @@ def load_img():
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port="5000")
+
+# If uncommenting following production code then add "gevent==20.9.0" to requirements.txt
+
     # http_server = WSGIServer(('', 5000), app)
     # http_server.serve_forever()
