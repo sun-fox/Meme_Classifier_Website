@@ -9,6 +9,7 @@ colorama==0.4.3
 dnspython==1.16.0
 ecdsa==0.13
 Flask==1.1.2
+numpy==1.18.1
 gast==0.3.3
 gevent==20.9.0
 google-auth==1.22.1
