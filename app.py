@@ -2,11 +2,9 @@ import numpy as np
 import flask
 from flask import Flask, render_template, request, send_from_directory
 from keras.models import load_model
-import base64
-from io import BytesIO
-from PIL import Image
 import cv2
 import keras
+from gevent.pywsgi import WSGIServer
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten
 from tensorflow.keras.layers import Conv2D, MaxPooling2D
@@ -65,6 +63,20 @@ def home():
     COUNT += 1
     return render_template('prediction.html', data=preds)
 
+@app.route('/prediction', methods=['POST'])
+def predict():
+    global COUNT
+    img = request.files['image']
+    img.save('static/{}.jpg'.format(COUNT))
+
+    img_path= 'static/{}.jpg'.format(COUNT)
+    img_arr = [img_preprocess(img_path)]
+    prediction = model.predict(img_arr)
+    preds = CATEGORIES[int(prediction[0][0])]
+
+    COUNT += 1
+    return preds
+
 
 @app.route('/load_img')
 def load_img():
@@ -73,4 +85,6 @@ def load_img():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port="5000")
+    # http_server = WSGIServer(('', 5000), app)
+    # http_server.serve_forever()
